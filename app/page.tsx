@@ -1,6 +1,6 @@
 import { BsFillMoonStarsFill } from 'react-icons/bs';
 import { AiFillLinkedin, AiFillGithub, AiFillMail } from 'react-icons/ai'
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import devtom from "../public/tom.jpg";
 import design from '../public/design.png';
 import code from '../public/code.png';
