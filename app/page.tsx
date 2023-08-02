@@ -4,13 +4,18 @@ import { AiFillLinkedin, AiFillGithub, AiFillMail } from 'react-icons/ai'
 import Image from "next/legacy/image";
 import MapChart from "../lib/mapChart.jsx";
 
+import {useForm} from 'react-hook-form';
+import emailjs from "@emailjs/browser";
+import { useRef } from 'react';
+
 import React from "react";
-import ReactDOM from "react-dom";
 
 import devtom from "../public/tom.jpg";
 import design from '../public/design.png';
 import code from '../public/code.png';
+
 import consulting from '../public/consulting.png';
+ 
 import web1 from '../public/web1.png';
 import web2 from '../public/web2.png';
 
@@ -27,10 +32,31 @@ import python from '../public/python.png';
 import sql from '../public/sql.png';
 
 import { useState } from "react";
-import { Container } from 'postcss';
 
 export default function Home() {
   const [darkMode, setDarkMode] = useState(false);
+  const {
+    register,
+    watch,
+    formState: { errors }
+  } = useForm();
+ 
+  const form = useRef();
+  const [success, setSuccess] = useState(null);
+
+  const handleSubmit = e => {
+    e.preventDefault();
+
+    emailjs.sendForm('service_p63ebvf', 'template_40tva1p', form.current, 'tBrPrw3neQuGG2dcE')
+      .then((result) => {
+          console.log(result.text);
+          setSuccess(true);
+      }, (error) => {
+          console.log(error.text);
+          setSuccess(false);
+      });
+  }
+
   return (
     <div className={darkMode ? 'dark' : ""}>
       <main className='bg-white px-10 md:px-20 lg:px-40 dark:bg-gray-900'>
@@ -133,13 +159,21 @@ export default function Home() {
         </section>
 
         <section>
-          <div className=''>
-            <div className='absolute'>
-              <h3>HELLOOOO</h3>
+          <div>
+            <div className='bg-white absolute dark:bg-gray-900 mt-96 ml-72' >
+              <form ref={form} onSubmit={handleSubmit}>
+                <h3 className='text-3xl py-1 dark:text-slate-300'>Contact Me</h3>
+                <input {...register("example", { required: true })} placeholder='Name' name='name'/>
+                <input {...register("exampleRequired", { required: true })} placeholder='Email' name='email' />
+                <textarea {...register("exampleRequired2", { required: true })} placeholder='Body' name='message'/>
+                <button type='submit'>Submit</button>
+                {success &&
+                "Your message has been sent :)"}
+              </form>
             </div>
             <div className=''>
               <div><MapChart /></div>
-            </div>
+            </div> 
           </div>
         </section>
       </main>
